@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <title>Joddy Lintar Balle</title>
-    <link rel="shourtcut icon" type="img/png" href="img/logo.png" />
+    <link rel="shourtcut icon" type="img/png" href="img/logo1.png" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="css/font-awesome.min.css" />
@@ -257,28 +257,36 @@
           </div>
           <div class="col-md-7">
             <div class="contact-from">
-              <form>
+              <div class="alert alert-success alert-dismissible fade show d-none my-alert" role="alert">
+                <strong>Thank you very much</strong> Message Success .
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              <form name="portfolio-contact-form">
                 <div class="row">
                   <div class="col-lg-6 mb-4">
-                    <input type="text" placeholder="Your Name" class="form-control form-control-lg fs-6 border-0 shadow" />
+                    <input type="text" placeholder="Your Name" class="form-control form-control-lg fs-6 border-0 shadow" id="name" name="name" />
                   </div>
                   <div class="col-lg-6 mb-4">
-                    <input type="text" placeholder="Your Email" class="form-control form-control-lg fs-6 border-0 shadow" />
+                    <input type="text" placeholder="Your Email" class="form-control form-control-lg fs-6 border-0 shadow" id="email" name="email" />
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-lg-12 mb-4">
-                    <input type="text" placeholder="Subject" class="form-control form-control-lg fs-6 border-0 shadow" />
+                    <input type="text" placeholder="Subject" class="form-control form-control-lg fs-6 border-0 shadow" id="subject" name="subject" />
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-lg-12 mb-4">
-                    <textarea rows="5" placeholder="Your Message" class="form-control form-control-lg fs-6 border-0 shadow"></textarea>
+                    <textarea rows="5" placeholder="Your Message" class="form-control form-control-lg fs-6 border-0 shadow" id="message" name="message"></textarea>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-lg-12">
-                    <button type="submit" class="btn btn-danger px-4">Send Message</button>
+                    <button type="submit" class="btn btn-danger px-4 btn-send">Send Message</button>
+                    <button class="btn btn-danger btn-loading d-none" type="button" disabled>
+                      <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                      Loading...
+                    </button>
                   </div>
                 </div>
               </form>
@@ -304,6 +312,33 @@
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="https://unpkg.com/boxicons@2.0.9/dist/boxicons.js"></script>
+    <script>
+      const scriptURL = "https://script.google.com/macros/s/AKfycbzz8wxRAqbPw0u0hPKw9LzI-wIfv0TI-8dmknMmeRTLYVxpDmpQbfkFpFbbAvOvDQu4Xg/exec";
+      const form = document.forms["portfolio-contact-form"];
+      const btnSend = document.querySelector(".btn-send");
+      const btnLoading = document.querySelector(".btn-loading");
+      const myAlert = document.querySelector(".my-alert");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        // ketika tombol send diklik
+        // tampilkan tombol loading, hilangkan tombol kirim
+        btnLoading.classList.toggle("d-none");
+        btnSend.classList.toggle("d-none");
+        fetch(scriptURL, { method: "POST", body: new FormData(form) })
+          .then((response) => {
+            // tampilkan tombol kirim, hilangkan tombol loading
+            btnLoading.classList.toggle("d-none");
+            btnSend.classList.toggle("d-none");
+            // tambahkan alart
+            myAlert.classList.toggle("d-none");
+            // reset form
+            form.reset();
+            console.log("Success!", response);
+          })
+          .catch((error) => console.error("Error!", error.message));
+      });
+    </script>
 
     <script>
       AOS.init();
